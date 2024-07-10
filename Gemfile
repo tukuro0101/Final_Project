@@ -5,6 +5,7 @@ ruby '3.0.2'
 gem 'devise'
 gem 'rails_admin', '~> 3.0'
 gem 'image_processing', '~> 1.2'
+gem 'faker'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.8'
 # Use postgresql as the database for Active Record

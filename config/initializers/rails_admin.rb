@@ -37,4 +37,60 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  config.model 'Product' do
+    list do
+      field :name
+      field :description
+      field :price
+      field :stock_quantity
+      field :category
+      field :image do
+        pretty_value do
+          bindings[:view].tag(:img, { :src => bindings[:object].image_url, :style => 'max-width: 100px; max-height: 100px;' }) if bindings[:object].image.attached?
+        end
+        filterable false
+        sortable false
+      end
+      field :created_at
+      field :updated_at
+    end
+
+    show do
+      field :name
+      field :description
+      field :price
+      field :stock_quantity
+      field :category
+      field :image do
+        pretty_value do
+          bindings[:view].tag(:img, { :src => bindings[:object].image_url, :style => 'max-width: 300px; max-height: 300px;' }) if bindings[:object].image.attached?
+        end
+      end
+      field :created_at
+      field :updated_at
+    end
+
+    edit do
+      field :name
+      field :description
+      field :price
+      field :stock_quantity
+      field :category
+      field :image, :active_storage do
+        pretty_value do
+          bindings[:view].tag(:img, { :src => bindings[:object].image_url, :style => 'max-width: 300px; max-height: 300px;' }) if bindings[:object].image.attached?
+        end
+        help 'Current image displayed below. Upload a new image to replace it.'
+      end
+      field :created_at do
+        read_only true
+        help 'Read-only'
+      end
+      field :updated_at do
+        read_only true
+        help 'Read-only'
+      end
+    end
+  end
 end
