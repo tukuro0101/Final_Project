@@ -14,3 +14,8 @@
  *= require_self
  */
  @import 'bootstrap';
+ .product-image {
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: cover !important; /* This ensures the image covers the entire area without distortion */
+  }

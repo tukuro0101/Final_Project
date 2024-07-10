@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @category.name %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><%= link_to 'Home', root_path %></li>
+        <li><%= link_to 'Contact', static_pages_contact_path %></li>
+        <li><%= link_to 'About', static_pages_about_path %></li>
+        <% if user_signed_in? %>
+          <% if current_user.admin? %>
+            <li><%= link_to 'Admin', rails_admin_path %></li>
+          <% end %>
+          <li><%= link_to 'Logout', custom_destroy_user_session_path, method: :delete, data: { turbo: false }, rel: 'nofollow' %></li>
+        <% else %>
+          <li><%= link_to 'Login', new_user_session_path %></li>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
+
+  <h1>Category: <%= @category.name %></h1>
+  <ul>
+    <% @products.each do |product| %>
+      <li>
+        <%= link_to product.name, product_path(product) %>
+        <p><%= product.description %></p>
+        <p>Price: $<%= product.price %></p>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= paginate @products %>
+</body>
+</html>

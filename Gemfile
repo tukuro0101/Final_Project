@@ -11,6 +11,7 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'bootstrap', '~> 5.1'
 gem 'sassc-rails', '>= 2.1.2'
+gem 'kaminari'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.8'
 # Use postgresql as the database for Active Record

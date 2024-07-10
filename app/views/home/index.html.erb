@@ -1,16 +1,58 @@
-<h1>Welcome to Anizkuro</h1>
-<h2>Products</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Listing</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+
+  <style>
+    .product-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Products</h1>
+
 <div>
-  <% @products.each do |product| %>
-    <div>
-      <h3><%= link_to product.name, product_path(product) %></h3>
-      <p><%= product.description %></p>
-      <p>Price: $<%= product.price %></p>
-      <% if product.image.attached? %>
-        <%= image_tag product.image %>
-      <% else %>
-        <p>No Image Available</p>
-      <% end %>
-    </div>
+  <%= form_with(url: root_path, method: :get, local: true) do %>
+    <label>Filter by Category:</label>
+    <% @categories.each do |category| %>
+      <label>
+        <%= check_box_tag 'category[]', category.id, params[:category]&.include?(category.id.to_s) %>
+        <%= category.name %>
+      </label>
+    <% end %>
+    <br>
+    <label>Search:</label>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag 'Filter' %>
   <% end %>
 </div>
+
+<ul>
+  <% @products.each do |product| %>
+    <li>
+      <%= link_to product.name, product_path(product) %>
+      <p><%= product.description %></p>
+      <p>Price: $<%= product.price %></p>
+      <p>Category: <%= product.category.name %></p>
+      <% if product.image.attached? %>
+        <%= image_tag product.image, class: 'product-image' %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<%= paginate @products %> 
+
+
+
+</html>
