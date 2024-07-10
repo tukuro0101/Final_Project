@@ -1,13 +1,23 @@
 Rails.application.routes.draw do
+  root 'home#index'
+  get 'static_pages/contact'
+  get 'static_pages/about'
+
   devise_for :users
+
+  resources :products, only: [:index, :show]
+  resources :categories, only: [:index, :show]
+
   namespace :admin do
     resources :products
     resources :categories
     resources :pages
     get 'dashboard', to: 'dashboard#index'
   end
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  devise_scope :user do
+    get 'sign_out', to: 'devise/sessions#destroy', as: :custom_destroy_user_session
+  end
 
-  root to: 'home#index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

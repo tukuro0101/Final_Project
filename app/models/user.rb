@@ -9,4 +9,7 @@ class User < ApplicationRecord
   has_many :reviews, dependent: :destroy
   has_one :cart, dependent: :destroy
   attribute :admin, :boolean, default: false
+  def admin?
+    self.admin
+  end
 end

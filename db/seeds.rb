@@ -11,6 +11,7 @@ Product.destroy_all
 Category.destroy_all
 User.destroy_all
 Tax.destroy_all
+StaticPage.destroy_all
 
 # Seed users
 10.times do
@@ -146,5 +147,6 @@ User.all.each do |user|
     )
   end
 end
-
+StaticPage.create!(title: 'Contact', content: 'Contact us at contact@example.com.')
+StaticPage.create!(title: 'About', content: 'We are a fictional store created for a Rails project.')
 puts "Database seeded successfully!"

@@ -1,0 +1,16 @@
+<h1>Welcome to Anizkuro</h1>
+<h2>Products</h2>
+<div>
+  <% @products.each do |product| %>
+    <div>
+      <h3><%= link_to product.name, product_path(product) %></h3>
+      <p><%= product.description %></p>
+      <p>Price: $<%= product.price %></p>
+      <% if product.image.attached? %>
+        <%= image_tag product.image %>
+      <% else %>
+        <p>No Image Available</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
