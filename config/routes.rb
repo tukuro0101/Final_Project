@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'products/show'
   root 'home#index'
   get 'static_pages/contact'
   get 'static_pages/about'

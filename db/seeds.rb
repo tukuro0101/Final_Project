@@ -38,17 +38,29 @@ categories.each do |category|
 end
 
 # Seed products
-Category.all.each do |category|
+categories.each do |category|
   10.times do
     product = Product.create!(
       name: Faker::Commerce.product_name,
       description: Faker::Lorem.paragraph,
       price: Faker::Commerce.price(range: 10.0..100.0),
       stock_quantity: Faker::Number.between(from: 1, to: 100),
-      category: category
+      category: Category.find_by(name: category)
     )
-    product.image.attach(io: File.open(Rails.root.join('/home/tukuro/Ruby/Final_Pr/img/ichigo.jpg')), filename: 'ichigo.jpg') # Adjust the path
+    product.image.attach(io: File.open(Rails.root.join('/home/tukuro/Ruby/Final_Pr/img/ichigo.jpg')), filename: 'ichigo.jpg')
   end
+end
+
+if Product.count < 100
+  (100 - Product.count).times do
+    product = Product.create!(
+      name: Faker::Commerce.product_name,
+      description: Faker::Lorem.paragraph,
+      price: Faker::Commerce.price(range: 10.0..100.0),
+      stock_quantity: Faker::Number.between(from: 1, to: 100),
+      category: Category.all.sample #retrive created category and select them
+    )
+    product.image.attach(io: File.open(Rails.root.join('/home/tukuro/Ruby/Final_Pr/img/ichigo.jpg')), filename: 'ichigo.jpg')
 end
 
 # Seed addresses
@@ -147,6 +159,7 @@ User.all.each do |user|
     )
   end
 end
+
 StaticPage.create!(title: 'Contact', content: 'Contact us at contact@example.com.')
 StaticPage.create!(title: 'About', content: 'We are a fictional store created for a Rails project.')
 puts "Database seeded successfully!"

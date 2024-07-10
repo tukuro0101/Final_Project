@@ -6,7 +6,7 @@ RailsAdmin.config do |config|
     warden.authenticate! scope: :user
   end
   config.current_user_method(&:current_user)
-
+  config.default_items_per_page = 100
   ## == CancanCan ==
   # config.authorize_with :cancancan
 
