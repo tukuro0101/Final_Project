@@ -4,7 +4,6 @@ class Admin::DashboardController < ApplicationController
   before_action :admin_only
 
   def index
-    # Any additional logic for the dashboard can go here
   end
 
   private

@@ -19,40 +19,39 @@
 
 <body>
 
-<h1>Products</h1>
-
-<div>
-  <%= form_with(url: root_path, method: :get, local: true) do %>
-    <label>Filter by Category:</label>
-    <% @categories.each do |category| %>
-      <label>
-        <%= check_box_tag 'category[]', category.id, params[:category]&.include?(category.id.to_s) %>
-        <%= category.name %>
-      </label>
-    <% end %>
-    <br>
-    <label>Search:</label>
-    <%= text_field_tag :search, params[:search] %>
-    <%= submit_tag 'Filter' %>
-  <% end %>
-</div>
-
-<ul>
-  <% @products.each do |product| %>
-    <li>
-      <%= link_to product.name, product_path(product) %>
-      <p><%= product.description %></p>
-      <p>Price: $<%= product.price %></p>
-      <p>Category: <%= product.category.name %></p>
-      <% if product.image.attached? %>
+  <div class="products">
+    <h1>Products</h1>
+    <div>
+      <h2>Filter by Category</h2>
+      <%= form_with(url: root_path, method: :get, local: true) do |form| %>
+        <% @categories.each do |category| %>
+          <%= check_box_tag 'category_ids[]', category.id, params[:category_ids]&.include?(category.id.to_s) %>
+          <%= label_tag "category_ids_#{category.id}", category.name %>
+        <% end %>
+        <%= form.submit 'Filter' %>
+      <% end %>
+    </div>
+    <div>
+      <h2>Search</h2>
+      <%= form_with(url: root_path, method: :get, local: true) do |form| %>
+        <%= form.text_field :search, value: params[:search], placeholder: 'Search products...' %>
+        <%= form.collection_select :search_category_id, @categories, :id, :name, { include_blank: 'All Categories' }, { value: params[:search_category_id] } %>
+        <%= form.submit 'Search' %>
+      <% end %>
+    </div>
+    <% @products.each do |product| %>
+      <div class="product">
+        <h3><%= link_to product.name, product_path(product) %></h3>
+        <p><%= product.description %></p>
+        <p>Price: $<%= product.price %></p>
+        <p>Category: <%= product.category.name %></p>
+        <% if product.image.attached? %>
         <%= image_tag product.image, class: 'product-image' %>
       <% end %>
-    </li>
-  <% end %>
-</ul>
-
-<%= paginate @products %> 
-
-
-
+      </div>
+    <% end %>
+    <%= paginate @products %>
+  </div>
+  </body>
 </html>
+      

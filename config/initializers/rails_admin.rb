@@ -22,6 +22,7 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
 
   config.model 'StaticPage' do
+    visible false
     edit do
       field :title
       field :content, :wysihtml5
@@ -49,10 +50,8 @@ RailsAdmin.config do |config|
     delete
     show_in_app
 
-    ## With an audit adapter, you can add:
-    # history_index
-    # history_show
   end
+  config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment', 'ActiveStorage::VariantRecord']
 
   config.model 'Product' do
     list do
