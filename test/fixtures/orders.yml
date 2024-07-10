@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  address: one
+  subtotal: 9.99
+  gst: 9.99
+  hst: 9.99
+  total_price: 9.99
+  status: MyString
+  created_at: 2024-07-10 06:07:49
+  updated_at: 2024-07-10 06:07:49
+
+two:
+  user: two
+  address: two
+  subtotal: 9.99
+  gst: 9.99
+  hst: 9.99
+  total_price: 9.99
+  status: MyString
+  created_at: 2024-07-10 06:07:49
+  updated_at: 2024-07-10 06:07:49

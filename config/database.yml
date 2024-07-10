@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: tukuro
+  password: rukia2323
+  host: localhost
+
+development:
+  <<: *default
+  database: anizkuro_development
+
+test:
+  <<: *default
+  database: anizkuro_test
+
+production:
+  <<: *default
+  database: anizkuro_production
+  username: tukuro
+  password: rukia2323
