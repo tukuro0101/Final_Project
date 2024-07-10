@@ -4,8 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :addresses
+  validates :email, presence: true, uniqueness: true
   has_many :orders
   has_many :reviews
   has_one :cart
   has_secure_password
+  def admin?
+    self.admin
+  end
 end
