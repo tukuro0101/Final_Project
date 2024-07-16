@@ -14,13 +14,25 @@
       height: 150px;
       object-fit: cover;
     }
+    .products {
+      margin: 20px;
+    }
+    .product {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .pagination {
+      margin-top: 20px;
+    }
   </style>
 </head>
 
 <body>
-
   <div class="products">
     <h1>Products</h1>
+
+    <!-- Category Filter -->
     <div>
       <h2>Filter by Category</h2>
       <%= form_with(url: root_path, method: :get, local: true) do |form| %>
@@ -31,6 +43,8 @@
         <%= form.submit 'Filter' %>
       <% end %>
     </div>
+
+    <!-- Search Bar -->
     <div>
       <h2>Search</h2>
       <%= form_with(url: root_path, method: :get, local: true) do |form| %>
@@ -39,6 +53,8 @@
         <%= form.submit 'Search' %>
       <% end %>
     </div>
+
+    <!-- Product List -->
     <% @products.each do |product| %>
       <div class="product">
         <h3><%= link_to product.name, product_path(product) %></h3>
@@ -46,12 +62,15 @@
         <p>Price: $<%= product.price %></p>
         <p>Category: <%= product.category.name %></p>
         <% if product.image.attached? %>
-        <%= image_tag product.image, class: 'product-image' %>
-      <% end %>
+          <%= image_tag product.image, class: 'product-image' %>
+        <% end %>
       </div>
     <% end %>
-    <%= paginate @products %>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <%= paginate @products %>
+    </div>
   </div>
-  </body>
+</body>
 </html>
-      

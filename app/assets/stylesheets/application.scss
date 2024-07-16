@@ -1,1 +1,29 @@
 @import 'bootstrap';
+
+.pagination {
+    text-align: center;
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: inline;
+      margin: 0 5px;
+      a, span {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #333;
+      }
+      a:hover, a:focus {
+        background-color: #f0f0f0;
+      }
+      .current {
+        background-color: #333;
+        color: #fff;
+      }
+    }
+  }
+  

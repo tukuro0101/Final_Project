@@ -11,7 +11,29 @@ Product.destroy_all
 Category.destroy_all
 User.destroy_all
 Tax.destroy_all
+Province.destroy_all
+TaxType.destroy_all
 StaticPage.destroy_all
+
+# Seed provinces
+provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"]
+provinces.each do |province|
+  Province.create!(name: province)
+end
+
+# Seed tax types
+gst = TaxType.create!(type_name: "GST")
+hst = TaxType.create!(type_name: "HST")
+pst = TaxType.create!(type_name: "PST")
+qst = TaxType.create!(type_name: "QST")
+
+# Seed taxes
+Province.all.each do |province|
+  Tax.create!(province: province, tax_type: gst, rate: 5.0)
+  Tax.create!(province: province, tax_type: hst, rate: 15.0) if ["New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Ontario", "Prince Edward Island"].include?(province.name)
+  Tax.create!(province: province, tax_type: pst, rate: 7.0) if ["British Columbia", "Manitoba", "Saskatchewan"].include?(province.name)
+  Tax.create!(province: province, tax_type: qst, rate: 9.975) if province.name == "Quebec"
+end
 
 # Seed users
 10.times do
@@ -24,8 +46,9 @@ StaticPage.destroy_all
     role: ['user', 'admin'].sample
   )
 end
+
 User.create!(
-  email: 'tukur0@gmail.com',
+  email: 'tukuro@gmail.com',
   password: 'rukia2323',
   password_confirmation: 'rukia2323',
   admin: true
@@ -58,9 +81,10 @@ if Product.count < 100
       description: Faker::Lorem.paragraph,
       price: Faker::Commerce.price(range: 10.0..100.0),
       stock_quantity: Faker::Number.between(from: 1, to: 100),
-      category: Category.all.sample #retrive created category and select them
+      category: Category.all.sample
     )
     product.image.attach(io: File.open(Rails.root.join('/home/tukuro/Ruby/Final_Pr/img/ichigo.jpg')), filename: 'ichigo.jpg')
+  end
 end
 
 # Seed addresses
@@ -69,33 +93,8 @@ User.all.each do |user|
     user: user,
     street: Faker::Address.street_address,
     city: Faker::Address.city,
-    province: Faker::Address.state_abbr,
+    province: Province.order('RANDOM()').first, # Assign a random province
     postal_code: Faker::Address.zip_code
-  )
-end
-
-# Seed tax rates
-tax_data = [
-  { province: 'AB', gst_rate: 5, hst_rate: 0 },
-  { province: 'BC', gst_rate: 5, hst_rate: 7 },
-  { province: 'MB', gst_rate: 5, hst_rate: 7 },
-  { province: 'NB', gst_rate: 0, hst_rate: 15 },
-  { province: 'NL', gst_rate: 0, hst_rate: 15 },
-  { province: 'NT', gst_rate: 5, hst_rate: 0 },
-  { province: 'NS', gst_rate: 0, hst_rate: 15 },
-  { province: 'NU', gst_rate: 5, hst_rate: 0 },
-  { province: 'ON', gst_rate: 0, hst_rate: 13 },
-  { province: 'PE', gst_rate: 0, hst_rate: 15 },
-  { province: 'QC', gst_rate: 5, hst_rate: 9.975 },
-  { province: 'SK', gst_rate: 5, hst_rate: 6 },
-  { province: 'YT', gst_rate: 5, hst_rate: 0 }
-]
-
-tax_data.each do |data|
-  Tax.create!(
-    province: data[:province],
-    gst_rate: data[:gst_rate],
-    hst_rate: data[:hst_rate]
   )
 end
 
@@ -108,6 +107,8 @@ User.all.each do |user|
     subtotal: 0,
     gst: 0,
     hst: 0,
+    pst: 0,
+    qst: 0,
     total_price: 0,
     status: ['pending', 'completed', 'shipped', 'cancelled'].sample
   )
@@ -125,15 +126,18 @@ User.all.each do |user|
     order.subtotal += price
   end
 
-  tax_rate = Tax.find_by(province: address.province)
-  if tax_rate
-    order.gst = order.subtotal * (tax_rate.gst_rate / 100.0)
-    order.hst = order.subtotal * (tax_rate.hst_rate / 100.0)
-  else
-    order.gst = 0
-    order.hst = 0
-  end
-  order.total_price = order.subtotal + order.gst + order.hst
+  province_taxes = address.province.taxes
+  gst_rate = province_taxes.find_by(tax_type: gst)&.rate || 0
+  hst_rate = province_taxes.find_by(tax_type: hst)&.rate || 0
+  pst_rate = province_taxes.find_by(tax_type: pst)&.rate || 0
+  qst_rate = province_taxes.find_by(tax_type: qst)&.rate || 0
+
+  order.gst = order.subtotal * (gst_rate / 100.0)
+  order.hst = order.subtotal * (hst_rate / 100.0)
+  order.pst = order.subtotal * (pst_rate / 100.0)
+  order.qst = order.subtotal * (qst_rate / 100.0)
+
+  order.total_price = order.subtotal + order.gst + order.hst + order.pst + order.qst
   order.save!
 
   # Seed reviews
