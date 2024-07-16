@@ -7,7 +7,6 @@ RailsAdmin.config do |config|
   end
   config.current_user_method(&:current_user)
   config.default_items_per_page = 100
-
   ## == CancanCan ==
   # config.authorize_with :cancancan
 
@@ -21,7 +20,6 @@ RailsAdmin.config do |config|
 
   ## == Gravatar integration ==
   ## To disable Gravatar integration in Navigation Bar set to false
-  config.show_gravatar = true
 
   config.model 'Order' do
     list do
@@ -61,6 +59,29 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'Cart' do
+    list do
+      field :user
+      field :total_price
+      field :created_at
+      field :updated_at
+      field :cart_items
+    end
+
+    show do
+      field :user
+      field :total_price
+      field :created_at
+      field :updated_at
+      field :cart_items
+    end
+
+    edit do
+      field :user
+      field :total_price
+      field :cart_items
+    end
+  end
 
   config.model 'StaticPage' do
     visible false
@@ -78,6 +99,8 @@ RailsAdmin.config do |config|
       field :name
     end
   end
+
+  config.show_gravatar = true
 
   config.actions do
     dashboard                     # mandatory

@@ -1,5 +1,7 @@
 class Address < ApplicationRecord
   belongs_to :user
   belongs_to :province
-  belongs_to :addressable, polymorphic: true, optional: true
+  has_many :orders
+
+  validates :street, :city, :province_id, :postal_code, presence: true
 end

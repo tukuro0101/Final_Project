@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_16_010412) do
+ActiveRecord::Schema.define(version: 2024_07_16_020529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,8 @@ ActiveRecord::Schema.define(version: 2024_07_16_010412) do
     t.decimal "price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "unit_price"
+    t.decimal "total_price"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
   end
@@ -94,14 +96,14 @@ ActiveRecord::Schema.define(version: 2024_07_16_010412) do
     t.bigint "user_id", null: false
     t.bigint "address_id", null: false
     t.decimal "subtotal"
-    t.decimal "gst"
-    t.decimal "hst"
     t.decimal "total_price"
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.decimal "pst"
-    t.decimal "qst"
+    t.decimal "gst", precision: 8, scale: 2, default: "0.0"
+    t.decimal "pst", precision: 8, scale: 2, default: "0.0"
+    t.decimal "hst", precision: 8, scale: 2, default: "0.0"
+    t.decimal "qst", precision: 8, scale: 2, default: "0.0"
     t.index ["address_id"], name: "index_orders_on_address_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end

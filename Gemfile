@@ -13,6 +13,8 @@ gem 'bootstrap', '~> 5.1'
 gem 'sassc-rails', '>= 2.1.2'
 gem 'kaminari'
 gem 'stripe'
+gem 'mini_racer', platforms: :ruby
+
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.8'

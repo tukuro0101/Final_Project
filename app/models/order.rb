@@ -1,18 +1,26 @@
 class Order < ApplicationRecord
   belongs_to :user
   has_many :order_items, dependent: :destroy
-  has_one :address, as: :addressable
+  belongs_to :address
 
-  def add_cart_items(cart)
-    cart.cart_items.each do |item|
-      order_items.build(product: item.product, quantity: item.quantity, price: item.product.price)
-    end
+  before_save :set_subtotal
+  before_save :calculate_taxes
+
+  def subtotal
+    order_items.collect { |oi| oi.valid? ? (oi.quantity * oi.unit_price) : 0 }.sum
   end
 
-  def calculate_totals
-    self.subtotal = order_items.sum { |item| item.price * item.quantity }
-    self.gst = subtotal * 0.05
-    self.hst = subtotal * 0.13
-    self.total_price = subtotal + gst + hst
+  private
+
+  def set_subtotal
+    self[:subtotal] = subtotal
+  end
+
+  def calculate_taxes
+    province = address.province
+    self[:gst] = subtotal * (province.gst_rate / 100.0)
+    self[:pst] = subtotal * (province.pst_rate / 100.0)
+    self[:hst] = subtotal * (province.hst_rate / 100.0)
+    self[:total_price] = subtotal + gst + pst + hst
   end
 end
