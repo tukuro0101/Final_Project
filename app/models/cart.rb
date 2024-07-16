@@ -1,5 +1,5 @@
 class Cart < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :cart_items, dependent: :destroy
   has_many :products, through: :cart_items
 
@@ -8,8 +8,9 @@ class Cart < ApplicationRecord
     if current_item
       current_item.quantity += 1
     else
-      current_item = cart_items.build(product_id: product_id)
+      current_item = cart_items.build(product_id: product_id, quantity: 1)
     end
+    current_item.save!
     current_item
   end
 

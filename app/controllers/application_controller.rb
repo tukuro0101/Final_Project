@@ -3,15 +3,20 @@ class ApplicationController < ActionController::Base
   helper_method :current_cart
 
   def current_cart
-    if session[:cart_id]
-      @current_cart ||= Cart.find(session[:cart_id])
+    if user_signed_in?
+      cart = current_user.cart || current_user.create_cart
+    elsif session[:cart_id]
+      cart = Cart.find_by(id: session[:cart_id])
+      if cart.nil?
+        cart = Cart.create
+        session[:cart_id] = cart.id
+      end
     else
-      @current_cart = Cart.create(user: current_user)
-      session[:cart_id] = @current_cart.id
-      @current_cart
+      cart = Cart.create
+      session[:cart_id] = cart.id
     end
+    cart
   end
-
 
   private
 

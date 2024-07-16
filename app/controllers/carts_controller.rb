@@ -8,7 +8,7 @@ class CartsController < ApplicationController
     @cart = current_cart
     @cart_item = @cart.add_product(product.id)
 
-    if @cart_item.save
+    if @cart_item.persisted?
       redirect_to @cart, notice: 'Product added to cart.'
     else
       redirect_to products_path, alert: 'Unable to add product to cart.'
@@ -18,10 +18,15 @@ class CartsController < ApplicationController
   private
 
   def current_cart
-    Cart.find(session[:cart_id])
-  rescue ActiveRecord::RecordNotFound
-    cart = Cart.create
-    session[:cart_id] = cart.id
+    if user_signed_in?
+      cart = current_user.cart || current_user.create_cart
+    else
+      cart = Cart.find_by(id: session[:cart_id])
+      if cart.nil?
+        cart = Cart.create
+        session[:cart_id] = cart.id
+      end
+    end
     cart
   end
 end

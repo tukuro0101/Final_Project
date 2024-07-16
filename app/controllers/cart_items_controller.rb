@@ -14,15 +14,15 @@ class CartItemsController < ApplicationController
 
   def update
     if @cart_item.update(cart_item_params)
-      redirect_to cart_path(current_cart), notice: 'Cart item was successfully updated.'
+      redirect_to cart_path(@cart_item.cart), notice: 'Cart item was successfully updated.'
     else
-      redirect_to cart_path(current_cart), alert: 'Unable to update cart item.'
+      redirect_to cart_path(@cart_item.cart), alert: 'Unable to update cart item.'
     end
   end
 
   def destroy
     @cart_item.destroy
-    redirect_to cart_path(current_cart), notice: 'Product was successfully removed from the cart.'
+    redirect_to cart_path(@cart_item.cart), notice: 'Product was successfully removed from the cart.'
   end
 
   private
