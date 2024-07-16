@@ -4,10 +4,12 @@ Rails.application.routes.draw do
   get 'static_pages/contact'
   get 'static_pages/about'
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
 
   resources :products, only: [:index, :show]
   resources :categories, only: [:index, :show]
+  resources :cart_items, only: [:update, :destroy]
+  resources :orders, only: [:index, :show, :update]
 
   namespace :admin do
     resources :products
@@ -17,6 +19,9 @@ Rails.application.routes.draw do
   end
   devise_scope :user do
     get 'sign_out', to: 'devise/sessions#destroy', as: :custom_destroy_user_session
+  end
+  resources :carts, only: [:show] do
+    post 'add_product', on: :member
   end
 
 

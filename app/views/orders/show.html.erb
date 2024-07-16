@@ -1,0 +1,22 @@
+<h1>Order <%= @order.id %></h1>
+
+<p>Total: <%= number_to_currency(@order.total_price) %></p>
+<p>Status: <%= @order.status %></p>
+
+<%= form_with(model: @order, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.select :status, Order.statuses.keys %>
+  </div>
+  <%= form.submit 'Update Status' %>
+<% end %>
+
+<h2>Items</h2>
+<% @order.order_items.each do |item| %>
+  <p>
+    <%= item.product.name %> - <%= item.quantity %> x <%= number_to_currency(item.price) %>
+  </p>
+<% end %>
+
+<h2>Shipping Address</h2>
+<p><%= @order.address.full_address %></p>

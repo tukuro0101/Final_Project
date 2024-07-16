@@ -1,0 +1,10 @@
+<h1>Checkout</h1>
+
+<%= form_with(model: @order, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :address_id %>
+    <%= form.collection_select :address_id, current_user.addresses, :id, :full_address %>
+  </div>
+
+  <%= form.submit 'Place Order' %>
+<% end %>
