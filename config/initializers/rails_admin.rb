@@ -23,6 +23,42 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
   config.show_gravatar = true
 
+  config.model 'Cart' do
+    list do
+      field :user
+      field :total_price do
+        formatted_value do
+          bindings[:object].total_price
+        end
+      end
+      field :created_at
+      field :updated_at
+      field :cart_items
+    end
+
+    show do
+      field :user
+      field :total_price do
+        formatted_value do
+          bindings[:object].total_price
+        end
+      end
+      field :created_at
+      field :updated_at
+      field :cart_items
+    end
+
+    edit do
+      field :user
+      field :total_price do
+        formatted_value do
+          bindings[:object].total_price
+        end
+      end
+      field :cart_items
+    end
+  end
+
   config.model 'Order' do
     list do
       field :user
@@ -60,7 +96,6 @@ RailsAdmin.config do |config|
       field :order_items
     end
   end
-
 
   config.model 'StaticPage' do
     visible false

@@ -1,14 +1,38 @@
 <h1>Your Shopping Cart</h1>
 
-<% @cart.cart_items.each do |item| %>
-  <p>
-    <%= item.product.name %> - 
-    <%= form_with(model: item, local: true) do |form| %>
-      <%= form.number_field :quantity, value: item.quantity, min: 1 %>
-      <%= form.submit 'Update' %>
-    <% end %>
-    <%= button_to 'Remove', cart_item_path(item), method: :delete %>
-  </p>
+<% if @cart.cart_items.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.cart_items.each do |item| %>
+        <tr>
+          <td><%= item.product.name %></td>
+          <td>
+            <%= form_with(model: item, local: true, method: :put) do |form| %>
+              <%= form.number_field :quantity, value: item.quantity %>
+              <%= form.submit 'Update' %>
+            <% end %>
+          </td>
+          <td><%= number_to_currency(item.product.price) %></td>
+          <td><%= number_to_currency(item.total_price) %></td>
+          <td>
+            <%= link_to 'Remove', cart_item_path(item), method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <h2>Total: <%= number_to_currency(@cart.total_price) %></h2>
+  <%= link_to 'Checkout', new_order_path, class: 'button' %>
+<% else %>
+  <p>Your cart is empty.</p>
+  <%= link_to 'Continue Shopping', root_path, class: 'button' %>
 <% end %>
-
-<h2>Total: <%= number_to_currency(@cart.total_price) %></h2>
